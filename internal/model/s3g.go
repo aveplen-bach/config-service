@@ -5,12 +5,13 @@ import (
 )
 
 type (
-	FaceRecognitionConfig struct {
+	S3GatewayConfig struct {
 		gorm.Model
-		Threshold float64
+		Host string
+		Port int32
 	}
 
-	FaceRecognitionRegistration struct {
+	S3GatewayRegistration struct {
 		gorm.Model
 		Host string
 		Port int32

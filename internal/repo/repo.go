@@ -1,10 +1,11 @@
 package repo
 
 import (
+	"sync"
+
 	"github.com/aveplen-bach/config-service/internal/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"sync"
 )
 
 type Repository struct {
@@ -18,14 +19,7 @@ func NewRepository() (*Repository, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(model.AuthenticationRegistration{})
-	db.AutoMigrate(model.AuthenticationDatabaseConfig{})
-
-	db.AutoMigrate(model.FaceRecognitionConfig{})
-	db.AutoMigrate(model.FaceRecognitionRegistration{})
-
-	db.AutoMigrate(model.S3GatewayConfig{})
-	db.AutoMigrate(model.S3GatewayRegistration{})
+	db.AutoMigrate(model.FacerecConfig{})
 
 	return &Repository{
 		db: db,

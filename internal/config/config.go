@@ -12,7 +12,7 @@ type (
 	}
 
 	ServerConfig struct {
-		Addr  string  `yaml:"addr" env-defaul:":8082"`
+		Addr  string  `yaml:"addr" env:"GRPC_LISTEN_ADDR" env-defaul:":8082"`
 		Debug *string `env:"GIN_MODE"`
 	}
 )

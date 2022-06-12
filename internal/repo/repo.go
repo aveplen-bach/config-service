@@ -14,12 +14,18 @@ type Repository struct {
 }
 
 func NewRepository() (*Repository, error) {
-	db, err := gorm.Open(sqlite.Open("database.sqlite"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
 	db.AutoMigrate(model.FacerecConfig{})
+
+	var count int64
+	db.Model(&model.FacerecConfig{}).Count(&count)
+	if count == 0 {
+		db.Save(&model.FacerecConfig{Threshold: 0.6})
+	}
 
 	return &Repository{
 		db: db,

@@ -14,6 +14,7 @@ import (
 
 func Start(cfg config.Config) {
 	// ================================= repo =================================
+	logrus.Info("creating repository")
 	repo, err := repo.NewRepository()
 	if err != nil {
 		logrus.Fatal("could not connect to db: %w", err)

@@ -1,8 +1,8 @@
-FROM golang:1.18 as builder
+FROM golang:1.18
 
-RUN mkdir -p /go/src/github.com/aveplen-bach/config-service
+RUN mkdir -p /go/src/github.com/aveplen-bach/config_service
 
-WORKDIR /go/src/github.com/aveplen-bach/config-service
+WORKDIR /go/src/github.com/aveplen-bach/config_service
 
 COPY go.mod go.mod
 COPY go.sum go.sum
@@ -11,11 +11,6 @@ RUN go mod download
 
 COPY . ./
 
-RUN CGO_ENABLED=0 go build -o /bin/config-service \
-    /go/src/github.com/aveplen-bach/config-service/cmd/main.go
+RUN go build -o bin/auth cmd/main.go
 
-FROM alpine:3.15.4 as runtime
-
-COPY --from=builder /bin/config-service /bin/config-service
-
-ENTRYPOINT [ "/bin/config-service" ]%
+ENTRYPOINT [ "go", "run", "cmd/main.go" ]

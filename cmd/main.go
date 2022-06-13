@@ -7,6 +7,6 @@ import (
 
 func main() {
 	var cfg config.Config
-	config.ReadConfig("config-gateway.yaml", &cfg)
+	config.ReadConfig("config-service.yaml", &cfg)
 	server.Start(cfg)
 }

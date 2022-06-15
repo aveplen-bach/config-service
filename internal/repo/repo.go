@@ -1,10 +1,12 @@
 package repo
 
 import (
+	"fmt"
 	"sync"
 
+	"github.com/aveplen-bach/config-service/internal/config"
 	"github.com/aveplen-bach/config-service/internal/model"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -13,8 +15,16 @@ type Repository struct {
 	mu *sync.Mutex
 }
 
-func NewRepository() (*Repository, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+func NewRepository(cfg config.Config) (*Repository, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		cfg.DatabaseConfig.Host,
+		cfg.DatabaseConfig.User,
+		cfg.DatabaseConfig.Password,
+		cfg.DatabaseConfig.Name,
+		cfg.DatabaseConfig.Port,
+	)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

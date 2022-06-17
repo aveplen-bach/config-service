@@ -2,6 +2,7 @@ package server
 
 import (
 	"net"
+	"net/http"
 
 	"github.com/aveplen-bach/config-service/internal/config"
 	"github.com/aveplen-bach/config-service/internal/repo"
@@ -29,7 +30,16 @@ func Start(cfg config.Config) {
 	listen, _ := net.Listen("tcp", cfg.ServerConfig.Addr)
 
 	logrus.Infof("listening on %s", cfg.ServerConfig.Addr)
-	if err := grpcServer.Serve(listen); err != nil {
-		logrus.Warn("server failed: %w", err)
-	}
+	go func() {
+		if err := grpcServer.Serve(listen); err != nil {
+			logrus.Warn("server failed: %w", err)
+		}
+	}()
+
+	// =============================== health live =============================
+	http.DefaultServeMux.HandleFunc("/cs/health/live", func(w http.ResponseWriter, r *http.Request) {
+		logrus.Info("feeling healthy")
+	})
+	logrus.Info("listening 8084")
+	logrus.Fatal(http.ListenAndServe(":8084", http.DefaultServeMux))
 }
